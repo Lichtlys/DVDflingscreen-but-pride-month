@@ -1,1 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DVD Rainbow Bounce</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+    }
 
+    #dvd {
+      position: absolute;
+      width: 200px;
+      height: 100px;
+      background: white;     /* will be overwritten by JS */
+      color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font: bold 40px Arial, sans-serif;
+      border-radius: 12px;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="dvd">DVD</div>
+
+  <script>
+    const dvd = document.getElementById("dvd");
+
+    let x = 100, y = 100;
+
+    // 50% slower than dx=2/dy=2:
+    let dx = 1;
+    let dy = 1;
+
+    // Rainbow color step every 3 seconds
+    let hue = 0;
+    function setRainbowColor() {
+      dvd.style.background = `hsl(${hue}, 90%, 55%)`;
+      dvd.style.color = "black";
+      hue = (hue + 40) % 360; // jump through rainbow
+    }
+    setRainbowColor();
+    setInterval(setRainbowColor, 3000);
+
+    function animate() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      const dvdWidth = dvd.offsetWidth;
+      const dvdHeight = dvd.offsetHeight;
+
+      if (x + dvdWidth >= width || x <= 0) dx = -dx;
+      if (y + dvdHeight >= height || y <= 0) dy = -dy;
+
+      x += dx;
+      y += dy;
+
+      dvd.style.left = x + "px";
+      dvd.style.top = y + "px";
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
